@@ -1,0 +1,212 @@
+.checkout-form {
+    display: flex;
+    padding: 30px;
+    width: 800px;
+    margin: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
+
+.checkout-form__arrow{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 5%;
+}
+
+
+.checkout-form__details {
+    flex: 0.6;
+    padding-right: 20px;
+    margin-right: 20px;
+    text-align: left;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.checkout-form__payment {
+    flex: 1;
+    margin-left: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.checkout-form__payment-element {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.checkout-form__submit-button {
+    margin-top: 30px;
+    width: 97%;
+    height: 45px;
+    padding: 10px;
+    border: none;
+    background: var(--theme-color);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.checkout-form__submit-button:hover {
+    background: #0a00d0;
+}
+
+.checkout-form__error-message {
+    color: red;
+    margin-top: 20px;
+}
+
+.checkout-form__powered-by {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.checkout-form__stripe-logo {
+    height: 30px;
+    margin-left: 0px;
+    margin-top: 3px;
+}
+
+.checkout-form__details-title {
+    font-size: 23px;
+    margin-bottom: 30px;
+    color: #333;
+    font-weight: 500;
+}
+
+.checkout-form__details-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.checkout-form__details-text {
+    margin-top: 17px;
+    color: #666;
+    font-size: 14px;
+}
+
+.checkout-form__details-value {
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.checkout-form__details-total {
+    color: #000000;
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 17px;
+}
+
+/* spinner/processing state, errors */
+.spinner {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner .spinner-div {
+    position: absolute;
+    width: 2px;
+    height: 8px;
+    background: #fff;
+    transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
+    animation: spinner-fzua35 1s calc(var(--delay) * 1s) infinite ease;
+}
+
+.spinner .spinner-div:nth-child(1) {
+    --delay: 0.1;
+    --rotation: 36;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(2) {
+    --delay: 0.2;
+    --rotation: 72;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(3) {
+    --delay: 0.3;
+    --rotation: 108;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(4) {
+    --delay: 0.4;
+    --rotation: 144;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(5) {
+    --delay: 0.5;
+    --rotation: 180;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(6) {
+    --delay: 0.6;
+    --rotation: 216;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(7) {
+    --delay: 0.7;
+    --rotation: 252;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(8) {
+    --delay: 0.8;
+    --rotation: 288;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(9) {
+    --delay: 0.9;
+    --rotation: 324;
+    --translation: 150;
+}
+
+.spinner .spinner-div:nth-child(10) {
+    --delay: 1;
+    --rotation: 360;
+    --translation: 150;
+}
+
+@keyframes spinner-fzua35 {
+
+    0%,
+    10%,
+    20%,
+    30%,
+    50%,
+    60%,
+    70%,
+    80%,
+    90%,
+    100% {
+        transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1%));
+    }
+
+    50% {
+        transform: rotate(calc(var(--rotation) * 1deg)) translate(0, calc(var(--translation) * 1.5%));
+    }
+}

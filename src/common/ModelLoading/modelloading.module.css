@@ -1,0 +1,110 @@
+/** BEGIN CSS **/
+@keyframes rotate-loading {
+    0% {
+        transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@keyframes loading-text-opacity {
+    0% {
+        opacity: 1
+    }
+
+    25% {
+        opacity: 0.5
+    }
+
+    50% {
+        opacity: 0
+    }
+
+    75% {
+        opacity: 0.5
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.loadingContainer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    inset: 0;
+    z-index: 10000;
+}
+
+.rodinBg{
+    /* background-color: rgb(18, 19, 23,1); */
+    /* backdrop-filter: blur(5px); */
+}
+
+.loadingBox {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+}
+
+.loading {
+    border: 4px solid transparent;
+    border-color: transparent #4500d966 transparent #4500d966;
+    animation: rotate-loading 1.5s linear 0s infinite normal;
+    transform-origin: 50% 50%;
+}
+
+.loadingContainer.white .loading{
+    border-color: transparent #fff transparent #fff;
+}
+
+.loadingContainer:hover .loading {
+    border-color: transparent var(--theme-color) transparent var(--theme-color);
+}
+
+
+.loadingContainer.white:hover .loading { 
+    border-color: transparent #fff transparent #fff;
+}
+
+.loadingContainer:hover .loading,
+.loadingContainer .loading {
+    transition: all 0.5s ease-in-out;
+}
+
+.loadingText {
+    animation: loading-text-opacity 2s linear 0s infinite normal;
+    color: #4500d966;
+    font-family: 'Helvetica Neue', Helvetica, Arial, Roboto, ui-sans-serif, -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 45px;
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: 0;
+    width: 100px;
+}
+
+.loadingContainer.white .loadingText{
+    color: #fff;
+}

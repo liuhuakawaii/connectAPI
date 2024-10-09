@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+Sitemap: https://hyperhuman.deemos.com/hyperhuman.sitemap.index.xml
+Sitemap: https://hyperhuman.deemos.com/pages.sitemap.xml
+Sitemap: https://hyperhuman.deemos.com/models.sitemap.xml

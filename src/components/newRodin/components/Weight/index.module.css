@@ -1,0 +1,43 @@
+
+.decreasingWrapper {
+  display: flex;
+  width: 100%;
+  height: 24px;
+  padding: 4px;
+  border-radius: 4px;
+  background: rgba(197, 168, 255, 0.4);
+  gap: 2px;
+  cursor: pointer;
+}
+
+.decreasingWrapper:hover .decreasingItem {
+  background-color: rgba(191, 160, 255, 1);
+}
+
+.decreasingItem {
+  height: 100%;
+  background-color: rgba(176, 176, 176, 1);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.decreasingItem.active {
+  background-color: rgba(191, 160, 255, 1);
+}
+
+.weightWrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 94px;
+  height: 148px;
+  z-index: 1000;
+  transform-origin: bottom right;
+  border-radius: 150px;
+  transform: translate(-50%, -50%) scale(0,1.5);
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  /* visibility: hidden; */
+  transition: opacity 0.1s ease, transform 0.1s ease, border-radius 0.1s ease;
+}

@@ -1,0 +1,158 @@
+.tipsCon {
+    position: fixed;
+    top: 0rem;
+    width: 100vw;
+    z-index: 1000000;
+    opacity: 90%;
+}
+
+.tip {
+    width: 100%;
+    background-color: #fff;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #999;
+    color: #ffffff;
+    opacity: 0.99;
+    position: relative;
+    pointer-events: auto;
+    overflow: hidden;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.tip:hover {
+    box-shadow: 0 0 12px #fff;
+    opacity: 1;
+}
+
+.tip.error {
+    background: rgb(189, 77, 69);
+}
+
+.tip.default {
+    background: rgb(189, 77, 69);
+}
+
+.tip.warning {
+    background: rgb(240, 173, 78);
+}
+
+.tip.success {
+    background: rgb(92, 184, 92);
+}
+
+.tip.primary {
+    background: rgb(2, 117, 216);
+}
+
+.row1 {
+    margin-left: 0rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contentWrapper {
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    text-align: start;
+    flex-shrink: 1;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.close {
+    font-weight: 700;
+    color: #fff;
+    outline: none;
+    border: none;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.8;
+    line-height: 1;
+    font-size: 16px;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: min(25px,3%);
+}
+
+.contentWrapper{
+    position: relative;
+    width: 100%;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+}
+
+.notificationMessage {
+    width: 100%;
+    min-height: 24px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    -ms-word-break: break-all;
+    /* 这个的使用在web-kit中有些危险，他可能会阶段所有东西 */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* 如果浏览器支持的话增加一个连接符(Blink不支持) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.close:hover {
+    color: var(--theme-color);
+}
+
+.row2 {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn {
+    height: 1.6rem;
+    width: 5rem;
+    font-size: 0.8rem;
+    line-height: 1.6rem;
+    text-align: center;
+    border: 1px solid #fff;
+    margin-right: 2rem;
+    cursor: pointer;
+    user-select: none;
+    color: #fff;
+    transition: background-color 0.1s ease, color 0.1s ease, font-weight 0.1s ease;
+}
+
+.btn.yes {
+    color: #fff;
+}
+
+.btn:hover {
+    font-weight: bold;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}

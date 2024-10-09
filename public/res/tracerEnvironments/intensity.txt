@@ -1,0 +1,4 @@
+default: 15
+window shaped light, night styx, Magnetic:30
+innocence: 效果稍差
+blues and reds, Dual Stant: 不推荐使用

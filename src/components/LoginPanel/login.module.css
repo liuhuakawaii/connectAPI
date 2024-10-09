@@ -1,0 +1,308 @@
+.con {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background: #00000080;
+    z-index: 9;
+    color: var(--font-light-color);
+    overflow: auto;
+    transition: all 3s;
+}
+
+.mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.loginCon {
+    position: absolute;
+    top: 0;
+    right: 0px;
+    height: 100vh;
+    width: 35rem;
+    padding: var(--side-gap);
+    background-color: var(--bg-dark-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    transform: translateX(100%) !important;
+    transition: transform 0.2s ease-in-out !important;
+}
+
+.slideIn {
+    transform: translateX(0) !important;
+}
+
+.title {
+    font-family: monospace;
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 3rem;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+@media (max-height: 700px) {
+    .title {
+        display: none;
+    }
+
+}
+
+.spinerBox {
+    width: 100%;
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+    padding: 2px;
+    box-sizing: border-box;
+    margin-top: 0.8rem;
+}
+
+.spiner {
+    background-image: linear-gradient(rgb(186, 66, 255) 35%, rgb(0, 225, 255));
+    position: absolute;
+    inset: 0;
+    animation: spinning82341 1.5s linear infinite;
+    text-align: center;
+    border-radius: var(--radius);
+    transform-origin: center center;
+    filter: blur(1px);
+    box-shadow: 0px -5px 20px 0px rgb(186, 66, 255), 0px 5px 20px 0px rgb(0, 225, 255);
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    z-index: -1;
+}
+
+@keyframes spinning82341 {
+    to {
+        transform: rotate(-90deg);
+    }
+}
+
+.btn {
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+}
+
+.github.btn {
+    margin-top: 1rem;
+    border-color: #707070;
+    background-color: #ffffff05;
+    font-family: 'Helvetica Neue', Helvetica, Arial, Roboto, ui-sans-serif, -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
+}
+
+.github.btn svg {
+    margin: 0 1rem;
+}
+
+.github.btn:hover {
+    background-color: #ffffff20;
+}
+
+.google.btn {
+    font-family: 'Helvetica Neue', Helvetica, Arial, Roboto, ui-sans-serif, -apple-system, system-ui, BlinkMacSystemFont, sans-serif;
+    border-color: #fff;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.54);
+}
+
+.google.btn:hover {
+    background-color: #eeeeee;
+}
+
+.google.btn img {
+    height: 3rem;
+    width: 3rem;
+}
+
+.splitCon {
+    position: relative;
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0rem;
+}
+
+.split {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--bg-gray4-color);
+    height: 0;
+    margin-top: 12px;
+}
+
+.splitCon .text {
+    background-color: var(--bg-dark-color);
+    position: absolute;
+    top: 0;
+    left: 48%;
+    line-height: 1rem;
+    user-select: none;
+    margin-top: 0.7rem;
+}
+
+.label {
+    padding-left: 1rem;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+.ipt {
+    width: 100%;
+    height: 3rem;
+    border: none;
+    outline: none;
+    padding: 1rem;
+    line-height: 1rem;
+    border-radius: var(--radius);
+    background-color: var(--bg-gray3-color);
+    margin-bottom: 1rem;
+    color: var(--font-light-color);
+    font-size: 1rem;
+}
+
+.ipt:focus {
+    background-color: var(--bg-gray4-color);
+}
+
+.remCon {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    color: var(--font-gray2-color);
+    margin-bottom: 1rem;
+}
+
+.remCon input {
+    margin-right: 0.5rem;
+}
+
+.remCon span {
+    cursor: pointer;
+    user-select: none;
+}
+
+.remCon span:hover {
+    color: #fff;
+}
+
+.spaceholder {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.sign.btn {
+    margin-top: 30px;
+    border-color: var(--theme-color);
+    background-color: var(--theme-color);
+    color: #fff;
+    font-weight: bold;
+}
+
+.sign:hover {
+    background-color: transparent;
+    color: var(--theme-color);
+}
+
+.tips {
+    /* font-size: .8rem; */
+    line-height: 1rem;
+    color: red;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.foot {
+    width: 100%;
+    height: 2rem;
+    margin-bottom: 0rem;
+    text-align: left;
+}
+
+.foot span {
+    cursor: pointer;
+}
+
+.fadeComponent {
+    opacity: 0;
+}
+
+.successTips {
+    color: green;
+}
+
+.errorTips {
+    color: red;
+}
+
+.fileInputWrapper {
+    position: relative;
+    display: inline-block;
+
+    text-align: center;
+    font-size: 14px;
+    overflow: hidden;
+
+
+    width: calc(100% - 4px);
+    height: 3rem;
+    line-height: 3rem;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid;
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.fileInput {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.viewer {
+    width: 26rem;
+    transition: all 0.3s linear;
+    overflow: hidden;
+}
+
+.showViewer.viewer {
+    height: 18rem;
+    opacity: 1;
+    visibility: visible;
+}
+
+.hideViewr.viewer {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+}
