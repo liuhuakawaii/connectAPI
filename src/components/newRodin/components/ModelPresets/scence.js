@@ -47,6 +47,7 @@ class ThreeController {
     this.setMeshParameters = options.setMeshParameters
     this.handleQuitOrthCamera = options.handleQuitOrthCamera
     this.closePortal = options.closePortal
+    this.handleConfirmBoxSize = options.handleConfirmBoxSize
     this.fileLoaderMap = {
       'glb': () => import('three149/examples/jsm/loaders/GLTFLoader').then(module => new module.GLTFLoader()),
       'fbx': () => import('three149/examples/jsm/loaders/FBXLoader').then(module => new module.FBXLoader()),
@@ -1429,6 +1430,7 @@ class ThreeController {
           } // Call the same function recursively to continue jittering
         });
       }
+
     }, 300);
 
   }
@@ -1729,7 +1731,7 @@ class ThreeController {
 
     this.animatePointCloud('customAnimation', this.pointsCache[0].points, transformedPoints);
     myPoint.lastPoints = transformedPoints;
-
+    this.handleConfirmBoxSize()
   }
 
   normalizePoints(transformedPoints) {

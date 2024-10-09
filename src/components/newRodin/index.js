@@ -83,50 +83,13 @@ function NewRodin() {
   const [meshParameters, setMeshParameters] = useState(defaultMeshParameters)
   const meshKeys = Object.keys(meshParameters)
   const meshValues = Object.values(meshParameters)
-  const [generatedCode, setGeneratedCode] = useState('')
   const [selectedShape, setSelectedShape] = useState(null)
   const [copied, setCopied] = useState(false);
-  const [modelParameters,] = useState({ scale: 1, rotation: 0 })
-  useEffect(() => {
-    // Generate code based on selected options and parameters
-    let code = `
-       {}
-    `
-
-    if (activeIndex === 0) {
-      code = `
-      {
-        "bbox_condition": "${meshValues[0].params}"
-      }
-    `
-    } else if (activeIndex === 1) {
-      let voxel_condition = pos2Base64(meshValues[1].params)
-      code = `
-        "voxel_condition": "${voxel_condition}",
-        "voxel_condition_cfg": "${meshValues[1].voxel_condition_cfg}",
-        "voxel_condition_weight": "${+meshValues[1].voxel_condition_weight}"
-      }
-    `
-    } else if (activeIndex === 2) {
-      code = `
-      {
-        "pcd_condition": "${meshValues[2].params}",
-        "pcd_condition_uncertainty": "${+meshValues[2].pcd_condition_uncertainty}"
-      }
-    `
-    }
-
-    setGeneratedCode(code)
-  }, [selectedShape, modelParameters, activeIndex, meshValues, meshParameters])
 
   const handleExampleClick = (shape) => {
     setSelectedShape(shape)
     // Simulating shape conversion
-    setTimeout(() => {
-      setGeneratedCode(`Converting to ${shape}...`)
-    }, 500)
   }
-
 
   const handleConditionChange = (condition) => {
     if (boundingBoxRef?.current?.threeController?.current) {
@@ -144,11 +107,20 @@ function NewRodin() {
           const threeController = boundingBoxRef.current.threeController.current
           console.log(threeController, 'threeController');
           if (condition === 0) {
-            threeController.useBoudingbox()
+            boundingBoxRef.current.setOpenThreeWrapper(false)
+            // threeController.useBoudingbox()
           } else if (condition === 1) {
-            threeController.useVoxel()
+            if (activeIndex === 0) {
+              boundingBoxRef.current.setOpenThreeWrapper(false)
+            } else {
+              threeController.useVoxel()
+            }
           } else if (condition === 2) {
-            threeController.usePcd()
+            if (activeIndex === 0) {
+              boundingBoxRef.current.setOpenThreeWrapper(false)
+            } else {
+              threeController.usePcd()
+            }
           }
         }
       }
@@ -248,7 +220,7 @@ function NewRodin() {
           <div>
             <h3 className="text-xl font-semibold mb-4 text-blue-200">Generated Code</h3>
             <div className="bg-gray-800 p-4 rounded-lg mb-4 relative">
-              {/* <pre className="text-sm text-blue-100 overflow-x-auto">{generatedCode}</pre> */}
+
               <ParamsDisplay
                 copied={copied}
                 setCopied={setCopied}

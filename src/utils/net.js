@@ -3,7 +3,6 @@ import { io } from 'socket.io-client';
 import { getGlobalShowFeedBack, getGlobalShowLogin, getGlobalTip } from './tipsService';
 import * as Sentry from "@sentry/react";
 import { fileToBase64, isNumber } from './format';
-import ReactGA from 'react-ga4';
 
 const isMock = false;
 const suffix = isMock ? '.json' : '';
