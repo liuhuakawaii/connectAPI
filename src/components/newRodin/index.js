@@ -184,22 +184,26 @@ function NewRodin() {
 
   const renderShapeButton = (shape) => {
     const icons = {
+      add: <IoAdd className="w-12 h-12 text-white" />,
       cube: <BiCube className="w-12 h-12 text-blue-400" />,
       sphere: <ImSphere className="w-12 h-12 text-green-400" />,
       cylinder: <BiCylinder className="w-12 h-12 text-purple-400" />,
       cone: <TbCone className="w-12 h-12 text-yellow-400" />,
       torus: <LiaRingSolid className="w-12 h-12 text-pink-400" />,
-      add: <IoAdd className="w-12 h-12 text-white" />
     };
 
+    // 定义add按钮特有的样式
+    const addButtonStyle = shape === 'add'
+      ? 'relative bg-[rgba(255,255,255,0.3)] before:absolute before:content-[""] before:w-[2px] before:h-[40px] before:bg-[rgba(255,255,255,0.3)] before:top-[50%] before:right-[-30px] before:-translate-y-1/2'
+      : '';
     return (
       <button
         key={shape}
         onClick={() => handleExampleClick(shape)}
-        className={`p-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 ${selectedShape === shape && selectedShape !== 'add'
-          ? 'bg-[#4a00e0] shadow-lg shadow-blue-500/50'
-          : 'bg-[rgba(255,255,255,0.2)] hover:bg-gray-700'
-          }`}
+        className={`${addButtonStyle} p-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 ${selectedShape === shape && selectedShape !== 'add'
+          ? 'bg-[#8571FF]'
+          : 'bg-[rgba(255,255,255,0.1)] hover:bg-gray-700'
+          } relative`}
       >
         {icons[shape]}
       </button>
@@ -237,7 +241,7 @@ function NewRodin() {
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-4 text-blue-200">Examples</h3>
             <div className="flex justify-around">
-              {['cube', 'sphere', 'cylinder', 'cone', 'torus', 'add'].map(renderShapeButton)}
+              {['add', 'cube', 'sphere', 'cylinder', 'cone', 'torus'].map(renderShapeButton)}
             </div>
           </div>
 
@@ -290,7 +294,7 @@ function NewRodin() {
             </div>
             <button
               onClick={handCopyCode}
-              className="w-full py-3 bg-[rgba(74,0,224,1)] rounded-lg hover:bg-[rgba(74,0,224,1)] transition-colors text-white font-semibold shadow-lg shadow-blue-500/50 hover:shadow-blue-500/75"
+              className="w-full py-3 bg-[#8571FF] rounded-lg hover:bg-[#8571FF] transition-colors text-white font-semibold shadow-lg shadow-blue-500/50 hover:shadow-blue-500/75"
             >
               {copied ? 'Copied!' : 'Copy'}
             </button>

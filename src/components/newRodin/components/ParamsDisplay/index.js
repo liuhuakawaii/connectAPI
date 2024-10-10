@@ -116,7 +116,7 @@ const ParamsDisplay = React.forwardRef(({
       </div>
       <button
         onClick={handleCopy}
-        className="absolute top-2 right-2 bg-[#4a00e0] text-white px-2 py-1 rounded text-sm"
+        className="absolute top-2 right-2 bg-[#8571FF] text-white px-2 py-1 rounded text-sm"
       >
         {copied ? 'Copied' : 'Copy'}
       </button>
