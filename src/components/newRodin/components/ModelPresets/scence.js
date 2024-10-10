@@ -1208,7 +1208,7 @@ class ThreeController {
       isSameModel = false;
     }
 
-    this.instancedMesh.rotation.set(0, 0, 0);
+    this?.instancedMesh?.rotation?.set(0, 0, 0);
 
     // Animate voxels data
     for (let i = 0; i < newLen; i++) {
@@ -1254,7 +1254,7 @@ class ThreeController {
       y: 2 * Math.PI, // Rotate exactly 360 degrees
       ease: "power2.out",
       onComplete: () => {
-        this.instancedMesh.rotation.set(0, 0, 0); // Reset rotation to ensure no cumulative error
+        this?.instancedMesh?.rotation?.set(0, 0, 0); // Reset rotation to ensure no cumulative error
       }
     });
 
@@ -1272,7 +1272,7 @@ class ThreeController {
           index === this.newVoxelIndex ?
             {
               ...item,
-              instancedMesh: this.instancedMesh.clone()
+              instancedMesh: this?.instancedMesh?.clone()
             }
             : item
         );

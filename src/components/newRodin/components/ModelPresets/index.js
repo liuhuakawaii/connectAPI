@@ -448,7 +448,7 @@ const ModelPresets = React.forwardRef(({
     handlerFiles(file);
   };
 
-  const handlerFiles = (file, condition) => {
+  const handlerFiles = (file, condition, changeFlag) => {
     restoreDefaultData();
     console.log(file, condition, 'file, conditionfile, condition');
 
@@ -456,7 +456,7 @@ const ModelPresets = React.forwardRef(({
       tip({ content: t('TIP_WRAN_THREEWRAPPER_VOXEL_COMPLETE'), type: 'warning' });
       return;
     }
-    setSelectedShape('add')
+    !changeFlag && setSelectedShape('add')
     const index = condition !== undefined ? condition : activeIndex;
 
     if (!openThreeWrapper) {

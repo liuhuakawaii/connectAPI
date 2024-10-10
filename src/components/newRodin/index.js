@@ -127,7 +127,7 @@ function NewRodin() {
       const createShape = shapeCreators[shape];
       if (createShape) {
         createShape.call(ShapesGeneratorController).then(data => {
-          b.handlerFiles(data);
+          b.handlerFiles(data, undefined, true);
         });
       }
     }
@@ -168,7 +168,7 @@ function NewRodin() {
           const createShape = shapeCreators[selectedShape];
           if (createShape) {
             createShape.call(ShapesGeneratorController).then(data => {
-              b.handlerFiles(data, condition);
+              b.handlerFiles(data, condition, true);
             }).then(() => {
               // setUpdateFlag(prev => prev + 1);
             });
