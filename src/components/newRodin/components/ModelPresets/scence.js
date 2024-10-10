@@ -48,6 +48,7 @@ class ThreeController {
     this.handleQuitOrthCamera = options.handleQuitOrthCamera
     this.closePortal = options.closePortal
     this.handleConfirmBoxSize = options.handleConfirmBoxSize
+    this.createShapescene = new THREE.Scene()
     this.fileLoaderMap = {
       'glb': () => import('three149/examples/jsm/loaders/GLTFLoader').then(module => new module.GLTFLoader()),
       'fbx': () => import('three149/examples/jsm/loaders/FBXLoader').then(module => new module.FBXLoader()),
@@ -1238,8 +1239,8 @@ class ThreeController {
         onUpdate: () => {
           this.dummy.position.copy(newVoxel[i].position);
           this.dummy.updateMatrix();
-          this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
-          this.instancedMesh.instanceMatrix.needsUpdate = true;
+          this.instancedMesh && this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
+          this.instancedMesh && (this.instancedMesh.instanceMatrix.needsUpdate = true);
         }
       });
     }
@@ -1263,7 +1264,7 @@ class ThreeController {
     gsap.to({}, {
       duration: 1, // Max transition duration
       onUpdate: () => {
-        this.instancedMesh.instanceMatrix.needsUpdate = true;
+        this.instancedMesh && (this.instancedMesh.instanceMatrix.needsUpdate = true)
         this.voxelsCache = this.voxelsCache.map((item, index) =>
           index === this.newVoxelIndex ?
             {
@@ -1328,8 +1329,8 @@ class ThreeController {
         onUpdate: () => {
           this.dummy.position.copy(newPoints[i].position);
           this.dummy.updateMatrix();
-          this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
-          this.instancedMesh.instanceMatrix.needsUpdate = true;
+          this.instancedMesh && this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
+          this.instancedMesh && (this.instancedMesh.instanceMatrix.needsUpdate = true);
         }
       });
     }
@@ -1415,8 +1416,8 @@ class ThreeController {
               if (!this.instancedMesh) return;
               this.dummy.position.copy(newPoints[i].positionJitter);
               this.dummy.updateMatrix();
-              this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
-              this.instancedMesh.instanceMatrix.needsUpdate = true;
+              this.instancedMesh && this.instancedMesh.setMatrixAt(i, this.dummy.matrix);
+              this.instancedMesh && (this.instancedMesh.instanceMatrix.needsUpdate = true);
             } catch (err) {
               console.error("An error occurred in onUpdate: ", err);
             }
@@ -1455,6 +1456,10 @@ class ThreeController {
       }
     });
   }
+
+
+  //shape 
+
 
   registerUpdateSliderValueFunction(updateSliderValue) {
     this.updateSliderValue = updateSliderValue;

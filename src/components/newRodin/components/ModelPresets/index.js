@@ -33,7 +33,15 @@ const ModelPresets = React.forwardRef(({
   uploadImageRaw,
   uploadImgBlob,
   activeIndex,
-  setActiveIndex
+  setActiveIndex,
+  voxelScale,
+  setVoxelScale,
+  voxelMode,
+  setVoxelMode,
+  pcdUncertainty,
+  setPcdUncertainty,
+  updateFlag,
+  setUpdateFlag
 }, ref) => {
   const { t } = useTranslation();
   const boundingBoxRef = useRef(null)
@@ -65,9 +73,7 @@ const ModelPresets = React.forwardRef(({
   const [samplingVal, setSamplingVal] = useState(2);
   const [directionIndex, setDirectionIndex] = useState(-1);
   const { openModal, closeModal } = useModal();
-  const [voxelScale, setVoxelScale] = useState(meshValues[1]?.voxel_condition_weight);
-  const [voxelMode, setVoxelMode] = useState(meshValues[1]?.voxel_condition_cfg);
-  const [pcdUncertainty, setPcdUncertainty] = useState(meshValues[2]?.pcd_condition_uncertainty);
+
   const [textureCache, setTextureCache] = useRecoilState(textureCacheAtom);
   const directWrapperRef = useRef(null);
   const [portal, setPortal] = useState(null);
@@ -154,10 +160,10 @@ const ModelPresets = React.forwardRef(({
     threeWrapper: threeWrapper,
     openThreeWrapper: openThreeWrapper,
     setOpenThreeWrapper: setOpenThreeWrapper,
-    threeController: threeController
+    threeController: threeController,
+    handlerFiles: handlerFiles,
+    entryController: entryController
   }))
-
-
 
   const checkDirectionDriver = () => {
     // if (localStorage.getItem('3dconditionDirectAnimation') === 'true') return
@@ -221,6 +227,9 @@ const ModelPresets = React.forwardRef(({
         threeController.current.homepageUpdateMesh(meshKeys[activeIndex], modelFile)
       }
       threeController.current.registerUpdateSliderValueFunction(updateSliderValue);
+      setTimeout(() => {
+        setUpdateFlag(pre => pre + 1)
+      }, 100);
     }, 500);
   }
 
@@ -365,7 +374,6 @@ const ModelPresets = React.forwardRef(({
     threeController.current.mainScene.restoreCameraInitialPos()
   }
 
-
   const openWatertightModal = () => {
     function confirm() {
       closeModal()
@@ -438,21 +446,32 @@ const ModelPresets = React.forwardRef(({
     handlerFiles(file);
   };
 
-  const handlerFiles = (file) => {
-    restoreDefaultData()
+  const handlerFiles = (file, condition) => {
+    restoreDefaultData();
+    console.log(file, condition, 'file, conditionfile, condition');
+
+    if (threeController?.current?.isAnimation) {
+      tip({ content: t('TIP_WRAN_THREEWRAPPER_VOXEL_COMPLETE'), type: 'warning' });
+      return;
+    }
+
+    const index = condition !== undefined ? condition : activeIndex;
+
     if (!openThreeWrapper) {
-      handleOpenBoundingBox(file, meshKeys[activeIndex])
+      handleOpenBoundingBox(file, meshKeys[index]);
     } else {
-      setLoading(true)
-      boundingWrapperRef.current?.clientHeight  // 强制渲染一次
-      if (activeIndex === 2) {
-        setRangeVal(0.010)
+      setLoading(true);
+      boundingWrapperRef.current?.clientHeight;  // 强制渲染一次
+
+      if (index === 2) {
+        setRangeVal(0.010);
       }
+
       setTimeout(() => {
-        threeController.current.homepageUpdateMesh(meshKeys[activeIndex], file)
+        threeController.current.homepageUpdateMesh(meshKeys[index], file);
       }, 50);
     }
-  }
+  };
 
   const handleFileInputChange = (e) => {
     const files = [...e.target.files];
@@ -480,6 +499,7 @@ const ModelPresets = React.forwardRef(({
       // restoreDefaultData()
       threeController.current.pointsTotalSum = SAMPLING_ARRAY[samplingVal]
       threeController.current.regeneratePCDbySampling()
+      setUpdateFlag(pre => pre + 1)
     }
   }, [samplingVal])
 
@@ -579,6 +599,7 @@ const ModelPresets = React.forwardRef(({
     if (updated && threeController.current) {
       threeController.current.updateMeshByRotate()
       setTimeout(() => {
+        setUpdateFlag(pre => pre + 1)
         setUpdated(false)
       }, 100);
     }
@@ -716,7 +737,7 @@ const ModelPresets = React.forwardRef(({
       ${!condition ? "w-[0px] h-[100px] sm:h-[128px] md:h-[158px]"
             : openThreeWrapper ? (
               activeIndex === 0 ? "w-[308px] h-[350px] rounded-[16px]"
-                : "w-[308px] h-[430px] rounded-[16px]"
+                : "w-[308px] h-[420px] rounded-[16px]"
             )
               : uploadStatus ? `${activeIndex === 10 ? "h-[200px] w-[268px]" : "h-[300px] w-[100%]"} rounded-2xl`
                 : "w-[100px] h-[100px] sm:w-[128px] sm:h-[128px] md:w-[158px] md:h-[158px] rounded-2xl"}`}>
@@ -797,7 +818,7 @@ const ModelPresets = React.forwardRef(({
               <div onClick={handleResetCamera} className='w-[30px] h-[30px] cursor-pointer hidden hover:bg-[rgba(255,255,255,0.3)] transition-300-ease rounded-full bg-[rgba(255,255,255,0.1)] backdrop-blur-[10px]'>
                 <img className='w-full h-full' src={resetFront} alt="resetFront" />
               </div>
-              <div onClick={handleClearModel} className='w-[30px] h-[30px] flex-center cursor-pointer hover:bg-[rgba(255,255,255,0.3)] transition-300-ease rounded-full bg-[rgba(255,255,255,0.1)] backdrop-blur-[10px]'>
+              <div onClick={handleClearModel} className='hidden w-[30px] h-[30px] flex-center cursor-pointer hover:bg-[rgba(255,255,255,0.3)] transition-300-ease rounded-full bg-[rgba(255,255,255,0.1)] backdrop-blur-[10px]'>
                 <AiOutlineClear fontSize={16} />
               </div>
               {activeIndex === 1 && (
@@ -845,6 +866,7 @@ const ModelPresets = React.forwardRef(({
               </span>
             </div>
             <BBoxSizeController
+              setUpdateFlag={setUpdateFlag}
               activeIndex={activeIndex}
               meshParameters={meshParameters}
               threeController={threeController}
@@ -865,7 +887,7 @@ const ModelPresets = React.forwardRef(({
               </div>
               <span className=' text-white [letter-spacing:1px]'>{activeIndex > -1 && meshValues[activeIndex]?.entryname?.toLowerCase()}</span>
             </div>
-            <button onClick={handleConfirmBoxSize} className='px-[8px] py-[4px] md:px-[12px] md:py-[4px] bg-[rgba(40,228,240,0.3)] rounded-[16px] text-[rgba(40,228,240,1)] transition-300-ease hover:bg-[rgba(40,228,240,0.1)]  [letter-spacing:1px]'>{t('THREEWRAPPER_BUTTON_CONFIRM')}</button>
+            <button onClick={handleConfirmBoxSize} className='hidden px-[8px] py-[4px] md:px-[12px] md:py-[4px] bg-[rgba(40,228,240,0.3)] rounded-[16px] text-[rgba(40,228,240,1)] transition-300-ease hover:bg-[rgba(40,228,240,0.1)]  [letter-spacing:1px]'>{t('THREEWRAPPER_BUTTON_CONFIRM')}</button>
           </div>
           {
             openThreeWrapper && activeIndex === 1 && (
@@ -953,7 +975,9 @@ const Entry = React.forwardRef(({ fileInputRef, threeController, setOpenThreeWra
 
 
   useImperativeHandle(ref, () => ({
-    entryRef: entryRef
+    entryRef: entryRef,
+    handleUploadModel: handleUploadModel,
+    fileInputRef: fileInputRef
   }), [entryRef.current])
 
 
@@ -1034,7 +1058,8 @@ const BBoxSizeController = ({
   handleQuitOrthCamera,
   voxelMode,
   voxelScale,
-  pcdUncertainty
+  pcdUncertainty,
+  setUpdateFlag
 }) => {
   const [inputFocusedByClick, setInputFocusedByClick] = useState(false)
   const [isFocused, setIsFocused] = useState(false);
@@ -1116,89 +1141,92 @@ const BBoxSizeController = ({
   }
   // console.log(meshParameters, 'fasfasfasf');
 
-  const changeWLH = (axis, newValue) => {
-    // console.log(activeIndex, 'activeIndex');
-
-    setMeshParameters(prev => {
-      return keyMap.reduce((acc, key, index) => {
-        const isActive = index === activeIndex;
-        let params = prev[key].params;
-        let pos = prev[key].pos;
-
-        if (isActive) {
-          if (activeIndex === 1) {
-            const voxelCache = threeController.current.voxelsCache[threeController.current.newVoxelIndex];
-            params = voxelCache.params;
-            pos = voxelCache.voxels;
-          } else if (activeIndex === 2) {
-            const pointsCache = threeController.current.pointsCache[threeController.current.newPointsIndex];
-            params = pointsCache.params;
-            pos = pointsCache.points;
-          } else if (activeIndex === 0) {
-            params = [...Object.values(prev[key].pos), 1];
-          }
-
-          // Update the specific axis value for the active item
-          // if (valueMap[activeIndex] === 'wlhparams') {
-          //   params = {
-          //     ...params,
-          //     [axis?.toLowerCase()]: newValue
-          //   };
-          // } else if (valueMap[activeIndex] === 'pos') {
-          //   pos = {
-          //     ...pos,
-          //     [axis?.toLowerCase()]: newValue
-          //   };
-          // }
-        }
-
-        const updatedState = {
-          ...acc,
-          [key]: {
-            ...prev[key],
-            confirmed: isActive,
-            params: params,
-            pos: pos,
-            ...(activeIndex === 1 && {
-              voxel_condition_cfg: voxelMode,
-              voxel_condition_weight: voxelScale,
-              [valueMap[activeIndex]]: {
-                ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
-                [axis?.toLowerCase()]: newValue
-              }
-            }),
-            ...(activeIndex === 2 && {
-              pcd_condition_uncertainty: pcdUncertainty,
-              [valueMap[activeIndex]]: {
-                ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
-                [axis?.toLowerCase()]: newValue
-              }
-            })
-          }
-        };
-
-        return updatedState;
-      }, {});
-    });
-  };
-
   // const changeWLH = (axis, newValue) => {
-  //   setMeshParameters(prev => ({
-  //     ...prev,
-  //     [keyMap[activeIndex]]: {
-  //       ...prev[keyMap[activeIndex]],
-  //       [valueMap[activeIndex]]: {
-  //         ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
-  //         [axis?.toLowerCase()]: newValue
+  //   // console.log(activeIndex, 'activeIndex');
+
+  //   setMeshParameters(prev => {
+  //     return keyMap.reduce((acc, key, index) => {
+  //       const isActive = index === activeIndex;
+  //       let params = prev[key].params;
+  //       let pos = prev[key].pos;
+
+  //       if (isActive) {
+  //         if (activeIndex === 1) {
+  //           const voxelCache = threeController.current.voxelsCache[threeController.current.newVoxelIndex];
+  //           params = voxelCache.params;
+  //           pos = voxelCache.voxels;
+  //         } else if (activeIndex === 2) {
+  //           const pointsCache = threeController.current.pointsCache[threeController.current.newPointsIndex];
+  //           params = pointsCache.params;
+  //           pos = pointsCache.points;
+  //         } else if (activeIndex === 0) {
+  //           params = [...Object.values(prev[key].pos), 1];
+  //         }
+
+  //         // Update the specific axis value for the active item
+  //         // if (valueMap[activeIndex] === 'wlhparams') {
+  //         //   params = {
+  //         //     ...params,
+  //         //     [axis?.toLowerCase()]: newValue
+  //         //   };
+  //         // } else if (valueMap[activeIndex] === 'pos') {
+  //         //   pos = {
+  //         //     ...pos,
+  //         //     [axis?.toLowerCase()]: newValue
+  //         //   };
+  //         // }
   //       }
-  //     }
-  //   }));
-  // }
+
+  //       const updatedState = {
+  //         ...acc,
+  //         [key]: {
+  //           ...prev[key],
+  //           confirmed: isActive,
+  //           params: params,
+  //           pos: pos,
+  //           ...(activeIndex === 1 && {
+  //             voxel_condition_cfg: voxelMode,
+  //             voxel_condition_weight: voxelScale,
+  //             [valueMap[activeIndex]]: {
+  //               ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
+  //               [axis?.toLowerCase()]: newValue
+  //             }
+  //           }),
+  //           ...(activeIndex === 2 && {
+  //             pcd_condition_uncertainty: pcdUncertainty,
+  //             [valueMap[activeIndex]]: {
+  //               ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
+  //               [axis?.toLowerCase()]: newValue
+  //             }
+  //           })
+  //         }
+  //       };
+
+  //       return updatedState;
+  //     }, {});
+  //   });
+  // };
+
+  const changeWLH = (axis, newValue) => {
+    setMeshParameters(prev => ({
+      ...prev,
+      [keyMap[activeIndex]]: {
+        ...prev[keyMap[activeIndex]],
+        [valueMap[activeIndex]]: {
+          ...prev[keyMap[activeIndex]][valueMap[activeIndex]],
+          [axis?.toLowerCase()]: newValue
+        }
+      }
+    }));
+  }
 
   const updateThreeController = async (axis, value) => {
     const newValueMap = { ...meshParameters[keyMap[activeIndex]][valueMap[activeIndex]], [axis?.toLowerCase()]: value };
     threeController.current.boundingBox.updateWHLOrScaleMesh(newValueMap, keyMap[activeIndex]);
     await threeController.current.updateMeshByScale(keyMap[activeIndex]);
+    setTimeout(() => {
+      setUpdateFlag(pre => pre + 1)
+    }, 100);
   }
 
   const handleMouseDown = (axis, e) => {

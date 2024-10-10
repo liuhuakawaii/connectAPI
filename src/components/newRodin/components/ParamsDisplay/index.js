@@ -1,33 +1,56 @@
 import React, { useMemo, useImperativeHandle, useState } from 'react';
 import ReactJson from 'react-json-view';
 import { pos2Base64 } from '../../../../utils/format';
+import './index.css'
 
-const ParamsDisplay = React.forwardRef(({ meshValues, activeIndex }, ref) => {
+const ParamsDisplay = React.forwardRef(({
+  meshValues,
+  activeIndex,
+  voxelScale,
+  voxelMode,
+  pcdUncertainty,
+  boundingBoxRef,
+  updateFlag
+}, ref) => {
   const [copied, setCopied] = useState(false);
 
   const params = useMemo(() => {
+    console.log('--------参数更新---------');
+
     let newParams = {};
 
     if (activeIndex === 0) {
       newParams = {
-        bbox_condition: meshValues[0].params
+        bbox_condition: [...Object.values(meshValues[0].pos), 1]
       };
     } else if (activeIndex === 1) {
-      let voxel_condition = pos2Base64(meshValues[1].params);
       newParams = {
-        voxel_condition: voxel_condition,
-        voxel_condition_cfg: meshValues[1].voxel_condition_cfg,
-        voxel_condition_weight: +meshValues[1].voxel_condition_weight
+        voxel_condition: '',
+        voxel_condition_cfg: voxelMode,
+        voxel_condition_weight: +voxelScale
       };
+      if (boundingBoxRef?.current?.threeController?.current) {
+        const threeController = boundingBoxRef.current.threeController.current
+        const voxelCache = threeController.voxelsCache[threeController.newVoxelIndex];
+        if (voxelCache.params) {
+          newParams.voxel_condition = pos2Base64(voxelCache.params)
+        }
+      }
+
     } else if (activeIndex === 2) {
       newParams = {
-        pcd_condition: meshValues[2].params,
-        pcd_condition_uncertainty: +meshValues[2].pcd_condition_uncertainty
+        pcd_condition: [],
+        pcd_condition_uncertainty: +pcdUncertainty
       };
+      if (boundingBoxRef?.current?.threeController?.current) {
+        const threeController = boundingBoxRef.current.threeController.current
+        const pointsCache = threeController.pointsCache[threeController.newPointsIndex];
+        newParams.pcd_condition = pointsCache.params
+      }
     }
 
     return newParams;
-  }, [activeIndex, meshValues]);
+  }, [meshValues, voxelScale, voxelMode, pcdUncertainty, boundingBoxRef, updateFlag]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(JSON.stringify(params, null, 2));
@@ -82,7 +105,7 @@ const ParamsDisplay = React.forwardRef(({ meshValues, activeIndex }, ref) => {
           quotesOnKeys={false}
           displayObjectSize={false}
           indentWidth={2}
-          collapseStringsAfterLength={50}
+          collapseStringsAfterLength={30}
           shouldCollapse={(field) => {
             // Collapse arrays and objects with more than 5 items
             return (Array.isArray(field.src) && field.src.length > 5) ||
@@ -93,7 +116,7 @@ const ParamsDisplay = React.forwardRef(({ meshValues, activeIndex }, ref) => {
       </div>
       <button
         onClick={handleCopy}
-        className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-sm"
+        className="absolute top-2 right-2 bg-[#4a00e0] text-white px-2 py-1 rounded text-sm"
       >
         {copied ? 'Copied' : 'Copy'}
       </button>

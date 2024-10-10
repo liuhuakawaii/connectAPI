@@ -1,0 +1,7 @@
+.variable-row,.object-key-val{
+  text-align: left !important;
+}
+
+.react-json-view{
+  padding-left: 48px !important;
+}
