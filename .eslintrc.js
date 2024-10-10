@@ -50,7 +50,6 @@ module.exports = {
     "globals": {
         "_czc": true,
         "process": true,
-        "Sentry": true,
         "window._env_": true,
     },
     "ignorePatterns": ["src/render/*",

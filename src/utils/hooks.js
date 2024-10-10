@@ -2,8 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getUserInfo, queryGroupInfo, getSubscriptionStatus, getEndpoint } from './net';
 import { taskDetailAtom, userPermissionAtom, subscriptionsInfoAtom, balanceAtom, subscriptionsPreInfoAtom } from '../store';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import * as Sentry from "@sentry/react";
-import { io } from 'socket.io-client';
 
 // Debounce
 export const useDebounce = (callback, delay) => {
@@ -142,7 +140,6 @@ export const useRefreshInfo = () => {
             }
 
         } catch (e) {
-            Sentry.captureException(e)
             console.error(e);
         }
     };
@@ -167,98 +164,6 @@ export const useLocalStorage = (name) => {
 
     return [getLocalStorage, setLocalStorage, removeLocalStorage]
 }
-
-export const useWebSocket = (initialPath) => {
-    const socketRef = useRef(null);
-    const [status, setSocketStatus] = useState('disconnected');
-    const BASE_URL = getEndpoint()
-    const deFaultpath = BASE_URL + initialPath;
-    const maxReconnectAttempts = 5;
-    const [reconnectAttempts, setReconnectAttempts] = useState(0);
-    const keyInfo = useRef(null)
-
-    const connect = useCallback((subscription, uuid) => {
-        if (reconnectAttempts < maxReconnectAttempts) {
-            console.log('初始状态 connect reconnectAttempts', reconnectAttempts);
-            initSocket(subscription, uuid);
-            socketRef.current?.connect();
-            setReconnectAttempts((attempts) => attempts + 1);
-        }
-    }, [reconnectAttempts]);
-
-    const initSocket = useCallback((subscription, uuid) => {
-        keyInfo.current = {
-            subscription,
-            uuid
-        }
-        if (socketRef.current) {
-            console.log('断开之前的链接');
-            disconnect();
-        }
-        socketRef.current = io(deFaultpath, {
-            query: {
-                subscription,
-            },
-            transports: ['websocket']
-        });
-
-        socketRef.current.on('connect', () => {
-            setSocketStatus('connected');
-            if (uuid) {
-                socketRef.current.emit('query', uuid);
-            }
-            console.log('Connected to WebSocket');
-        });
-
-        socketRef.current.on('disconnect', () => {
-            // 触发重连逻辑
-            console.log('Disconnected from WebSocket');
-            setSocketStatus('disconnected');
-        });
-
-        socketRef.current.on('error', (error) => {
-            console.error('WebSocket error:', error);
-        });
-    }, []);
-
-    const query = useCallback((uuid) => {
-        socketRef.current.emit('query', uuid);
-    }, []);
-
-    const disconnect = useCallback(() => {
-        if (socketRef.current) {
-            socketRef.current.off();
-            socketRef.current.disconnect();
-        }
-    }, []);
-
-    const onMessage = useCallback((event, callback, onFailed) => {
-        if (socketRef.current) {
-            socketRef.current.on(event, (data, res) => {
-                console.log('onMessage ID', data);
-                console.log('onMessage jobStatus', res?.jobStatus);
-                setReconnectAttempts(prevReconnectAttempts => {
-                    if (res?.jobStatus === 'Failed') {  //Failed  Running
-                        console.log('Failed - current reconnect attempts', prevReconnectAttempts);
-                        if (prevReconnectAttempts >= maxReconnectAttempts) {
-                            disconnect()
-                            console.log('正在尝试重连', keyInfo.current);
-                            setReconnectAttempts(0);
-                            connect(keyInfo.current.subscription, keyInfo.current.uuid);
-                            onFailed && onFailed();
-                            return 0;
-                        }
-                        return prevReconnectAttempts + 1;
-                    }
-                    return prevReconnectAttempts;
-                });
-                return callback(data, res);
-            });
-        }
-    }, []);
-
-    return { status, connect, query, setSocketStatus, disconnect, onMessage, setReconnectAttempts };
-};
 
 
 export const useDebounceVal = (value, delay) => {

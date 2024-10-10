@@ -50,11 +50,12 @@ module.exports = function override(config) {
         openAnalyzer: false,
     }));
 
-
     if (isProduction) {
         // Production-specific optimizations
         config.mode = 'production';
-        config.devtool = 'source-map';
+
+        // Disable source map generation in production
+        config.devtool = false;
 
         // Terser Plugin
         config.optimization.minimizer = config.optimization.minimizer || [];
@@ -80,6 +81,20 @@ module.exports = function override(config) {
             clientsClaim: true,
             skipWaiting: true,
         }));
+
+        // SplitChunks
+        config.optimization.splitChunks = {
+            chunks: 'all'
+        };
+
+        // Add CompressionPlugin for gzip
+        config.plugins.push(new CompressionPlugin({
+            filename: '[path][base].gz',
+            algorithm: 'gzip',
+            test: /\.(js|css|html|svg)$/,
+            threshold: 10240,
+            minRatio: 0.8,
+        }));
     } else {
         config.mode = 'development';
     }
@@ -92,29 +107,12 @@ module.exports = function override(config) {
         '@': path.resolve(__dirname, 'src')
     };
 
-    // Add WorkboxWebpackPlugin
-    if (isProduction) {
-        config.optimization.splitChunks = {
-            chunks: 'all'
-        }
-    }
-
+    // Add ProgressBarPlugin
     config.plugins.push(new webpack.ProgressPlugin({
         handler: (percentage, message, ...args) => {
             console.info(`${(percentage * 100).toFixed(2)}%`, message, ...args);
         },
     }));
-
-    // Add CompressionPlugin for gzip
-    if (isProduction) {
-        config.plugins.push(new CompressionPlugin({
-            filename: '[path][base].gz',
-            algorithm: 'gzip',
-            test: /\.(js|css|html|svg)$/,
-            threshold: 10240,
-            minRatio: 0.8,
-        }));
-    }
 
     return config;
 };
