@@ -3,5 +3,44 @@
 }
 
 .react-json-view{
-  padding-left: 48px !important;
+  padding-left: 24px !important;
+  min-height: 570px !important;
+  overflow-y: scroll !important;
+}
+
+.value-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.key-name {
+  color: #a6e22e;
+}
+
+.long-value {
+  margin-left: 8px;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow-x: auto;
+  max-width: calc(100% - 16px);
+  color: #e6db74;
+  padding-bottom: 5px;
+}
+
+/* 自定义滚动条样式 */
+.long-value::-webkit-scrollbar {
+  height: 6px;
+}
+
+.long-value::-webkit-scrollbar-track {
+  background: #272822;
+}
+
+.long-value::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.long-value::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

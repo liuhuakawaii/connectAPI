@@ -1,4 +1,4 @@
-import React, { useMemo, useImperativeHandle, useState } from 'react';
+import React, { useMemo, useImperativeHandle, useState, useEffect } from 'react';
 import ReactJson from 'react-json-view';
 import { pos2Base64 } from '../../../../utils/format';
 import './index.css'
@@ -13,8 +13,9 @@ const ParamsDisplay = React.forwardRef(({
   updateFlag
 }, ref) => {
   const [copied, setCopied] = useState(false);
+  const [params, setParams] = useState({});
 
-  const params = useMemo(() => {
+  useEffect(() => {
     console.log('--------参数更新---------');
 
     let newParams = {};
@@ -49,7 +50,7 @@ const ParamsDisplay = React.forwardRef(({
       }
     }
 
-    return newParams;
+    setParams(newParams);
   }, [meshValues, voxelScale, voxelMode, pcdUncertainty, boundingBoxRef, updateFlag]);
 
   const handleCopy = () => {
@@ -65,17 +66,9 @@ const ParamsDisplay = React.forwardRef(({
   const valueRenderer = (props) => {
     if (props.name === 'voxel_condition' && typeof props.value === 'string') {
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ color: '#a6e22e' }}>&quot;voxel_condition&quot;:</span>
-          <div style={{
-            marginLeft: '8px',
-            marginTop: '4px',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            maxWidth: 'calc(100% - 16px)',
-            color: '#e6db74'
-          }}>
+        <div className="value-container">
+          <span className="key-name">&quot;voxel_condition&quot;:</span>
+          <div className="long-value">
             &quot;{props.value}&quot;
           </div>
         </div>
@@ -86,7 +79,7 @@ const ParamsDisplay = React.forwardRef(({
 
   return (
     <div className="bg-gray-800 p-4 rounded-lg mb-4 relative overflow-hidden">
-      <div className="overflow-auto max-h-[500px]">
+      <div className="overflow-auto max-h-[570px] w-[316px]">
         <ReactJson
           src={params}
           theme="monokai"
@@ -107,7 +100,6 @@ const ParamsDisplay = React.forwardRef(({
           indentWidth={2}
           collapseStringsAfterLength={30}
           shouldCollapse={(field) => {
-            // Collapse arrays and objects with more than 5 items
             return (Array.isArray(field.src) && field.src.length > 5) ||
               (typeof field.src === 'object' && field.src !== null && Object.keys(field.src).length > 5);
           }}

@@ -44,11 +44,11 @@ module.exports = function override(config) {
     }));
 
     // Add BundleAnalyzerPlugin for development
-    config.plugins.push(new BundleAnalyzerPlugin({
-        analyzerMode: 'static',
-        reportFilename: 'bundle-report.html',
-        openAnalyzer: false,
-    }));
+    // config.plugins.push(new BundleAnalyzerPlugin({
+    //     analyzerMode: 'static',
+    //     reportFilename: 'bundle-report.html',
+    //     openAnalyzer: false,
+    // }));
 
     if (isProduction) {
         // Production-specific optimizations

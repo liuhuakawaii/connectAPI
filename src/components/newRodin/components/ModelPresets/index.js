@@ -208,6 +208,7 @@ const ModelPresets = React.forwardRef(({
           loadingcb: (close) => {
             setLoading(false)
             if (close) {
+              console.log('loadingcb----loadingcb');
               setOpenThreeWrapper(false)
               threeController.current.canResize = false
             }
@@ -227,9 +228,7 @@ const ModelPresets = React.forwardRef(({
         threeController.current.homepageUpdateMesh(meshKeys[activeIndex], modelFile)
       }
       threeController.current.registerUpdateSliderValueFunction(updateSliderValue);
-      setTimeout(() => {
-        setUpdateFlag(pre => pre + 1)
-      }, 100);
+      setUpdateFlag(pre => pre + 1)
     }, 500);
   }
 
@@ -255,6 +254,7 @@ const ModelPresets = React.forwardRef(({
   }
 
   const handleNoConfirm = () => {
+    console.log('handleNoConfirm----handleNoConfirm');
     setOpenThreeWrapper(false)
     // const preMeshParameters = JSON.parse(JSON.stringify(meshParameters))
     if (activeIndex === 1) {
@@ -487,6 +487,8 @@ const ModelPresets = React.forwardRef(({
       return;
     }
     threeController.current.clearModel()
+    console.log('handleClearModel----handleClearModel');
+
     setOpenThreeWrapper(false)
     setTimeout(() => {
       setOpenRange(false)
@@ -598,8 +600,8 @@ const ModelPresets = React.forwardRef(({
   useEffect(() => {
     if (updated && threeController.current) {
       threeController.current.updateMeshByRotate()
+      setUpdateFlag(pre => pre + 1)
       setTimeout(() => {
-        setUpdateFlag(pre => pre + 1)
         setUpdated(false)
       }, 100);
     }
@@ -832,7 +834,7 @@ const ModelPresets = React.forwardRef(({
               )}
             </div>
 
-            <div className={`absolute w-[95%] h-20px top-[12px] left-[12px] transition-300-ease flex gap-[8px] items-center
+            <div className={`absolute w-[85%] h-20px top-[12px] left-[12px] transition-300-ease flex gap-[8px] items-center
               ${showDirectRange && directionIndex >= 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none "}`}>
               <DraggableInput
                 value={sliderValue[directionIndex - 1]}
@@ -1224,9 +1226,7 @@ const BBoxSizeController = ({
     const newValueMap = { ...meshParameters[keyMap[activeIndex]][valueMap[activeIndex]], [axis?.toLowerCase()]: value };
     threeController.current.boundingBox.updateWHLOrScaleMesh(newValueMap, keyMap[activeIndex]);
     await threeController.current.updateMeshByScale(keyMap[activeIndex]);
-    setTimeout(() => {
-      setUpdateFlag(pre => pre + 1)
-    }, 100);
+    setUpdateFlag(pre => pre + 1)
   }
 
   const handleMouseDown = (axis, e) => {
@@ -1314,7 +1314,7 @@ const BBoxSizeController = ({
               onInput={(e) => handleInput(param[0], e)}
               onCompositionStart={handleCompositionStart}
               onCompositionEnd={(e) => handleCompositionEnd(param[0], e)}
-              className={`w-[135px] pl-[4px] text-white outline-none bg-transparent text-center select-none ${style.bboxinput}`}
+              className={`w-[65px] pl-[4px] text-white outline-none bg-transparent text-center select-none ${style.bboxinput}`}
               value={param[1]}
               type="text" />
           </div>

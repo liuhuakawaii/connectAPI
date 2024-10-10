@@ -153,6 +153,7 @@ function NewRodin() {
         };
         if (selectedShape === 'add') {
           actions[condition]?.();
+          setUpdateFlag(prev => prev + 1);
         } else {
           const b = boundingBoxRef.current;
           const ShapesGeneratorController = ShapesGeneratorRef.current;
@@ -168,12 +169,11 @@ function NewRodin() {
           if (createShape) {
             createShape.call(ShapesGeneratorController).then(data => {
               b.handlerFiles(data, condition);
+            }).then(() => {
+              setUpdateFlag(prev => prev + 1);
             });
           }
         }
-        setTimeout(() => {
-          setUpdateFlag(prev => prev + 1);
-        }, 300);
       }
     }
   };
@@ -184,29 +184,29 @@ function NewRodin() {
 
   const renderShapeButton = (shape) => {
     const icons = {
-      add: <IoAdd className="w-12 h-12 text-white" />,
-      cube: <BiCube className="w-12 h-12 text-blue-400" />,
-      sphere: <ImSphere className="w-12 h-12 text-green-400" />,
-      cylinder: <BiCylinder className="w-12 h-12 text-purple-400" />,
-      cone: <TbCone className="w-12 h-12 text-yellow-400" />,
-      torus: <LiaRingSolid className="w-12 h-12 text-pink-400" />,
+      add: <IoAdd className="w-8 h-8 text-white" />,
+      cube: <BiCube className="w-8 h-8 text-blue-400" />,
+      sphere: <ImSphere className="w-8 h-8 text-green-400" />,
+      cylinder: <BiCylinder className="w-8 h-8 text-purple-400" />,
+      cone: <TbCone className="w-8 h-8 text-yellow-400" />,
+      torus: <LiaRingSolid className="w-8 h-8 text-pink-400" />,
     };
 
     // 定义add按钮特有的样式
     const addButtonStyle = shape === 'add'
-      ? 'relative bg-[rgba(255,255,255,0.3)] before:absolute before:content-[""] before:w-[2px] before:h-[40px] before:bg-[rgba(255,255,255,0.3)] before:top-[50%] before:right-[-30px] before:-translate-y-1/2'
+      ? 'relative bg-[rgba(255,255,255,0.3)] before:absolute before:content-[""] before:w-[2px] before:h-[40px] before:bg-[rgba(255,255,255,0.3)] before:top-[50%] before:right-[-10px] before:-translate-y-1/2'
       : '';
     return (
-      <button
+      <div
         key={shape}
         onClick={() => handleExampleClick(shape)}
-        className={`${addButtonStyle} p-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 ${selectedShape === shape && selectedShape !== 'add'
+        className={`${addButtonStyle}  p-[10px] rounded-lg transition-all duration-300 ease-in-out transform hover:scale-110 ${selectedShape === shape && selectedShape !== 'add'
           ? 'bg-[#8571FF]'
           : 'bg-[rgba(255,255,255,0.1)] hover:bg-gray-700'
           } relative`}
       >
         {icons[shape]}
-      </button>
+      </div>
     );
   };
 
@@ -214,14 +214,14 @@ function NewRodin() {
     <button
       key={condition.entryname}
       onClick={() => handleConditionChange(index)}
-      className={`px-6 py-3 flex items-center gap-3 rounded-lg transition-all duration-300 ease-in-out border [background:linear-gradient(180deg,rgba(71,71,76,0.5)_50%,rgba(26,101,121,0.5)_100%)] 
+      className={` p-3 flex items-center gap-3 rounded-lg transition-all duration-300 ease-in-out border [background:linear-gradient(180deg,rgba(71,71,76,0.5)_50%,rgba(26,101,121,0.5)_100%)] 
         ${activeIndex === index
           ? '[border-color:#28e4f0]'
           : '[border-color:transparent] transition-300-ease  transition-300-ease hover:text-[rgba(255,255,255,1)]  hover:[background:linear-gradient(180deg,rgba(71,71,76,0.8)_50%,rgba(26,101,121,0.8)_100%)]'
         }`}
     >
-      <img src={condition.img} className='w-[28px]' alt={condition.entryname} />
-      <span>{condition.entryname}</span>
+      <img src={condition.img} className='w-[24px]' alt={condition.entryname} />
+      <span className='text-md'>{condition.entryname}</span>
     </button>
   );
 
@@ -235,70 +235,76 @@ function NewRodin() {
 
       <div className="min-h-screen w-[960px] rounded-xl bg-[rgba(0,0,0,0.1)] text-blue-100 p-8 flex items-center justify-center">
         <div className="bg-black bg-opacity-50 p-8 rounded-xl shadow-2xl max-w-4xl w-full backdrop-filter backdrop-blur-sm border border-blue-500 border-opacity-30">
-          <h2 className="text-4xl font-bold mb-8 text-center text-blue-300 animate-pulse">3D Converter</h2>
+          <h2 className="text-4xl font-bold mb-8 text-center text-blue-300">3D Condition API</h2>
 
-          {/* Examples */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-blue-200">Examples</h3>
-            <div className="flex justify-around">
-              {['add', 'cube', 'sphere', 'cylinder', 'cone', 'torus'].map(renderShapeButton)}
+          <div className='flex gap-4'>
+            <div className='flex-[8] shrink-0 h-[756px] flex flex-col justify-between '>
+              {/* Examples */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 text-blue-200">Examples</h3>
+                <div className="flex justify-around">
+                  {['add', 'cube', 'sphere', 'cylinder', 'cone', 'torus'].map(renderShapeButton)}
+                </div>
+              </div>
+
+              {/* Conditions */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold mb-4 text-blue-200">Conditions</h3>
+                <div className="flex justify-around">
+                  {meshValues.map(renderConditionButton)}
+                </div>
+              </div>
+
+              {/* Model Upload and Parameters */}
+              <div className="">
+                <h3 className="text-xl font-semibold mb-4 text-blue-200">Upload Model & Adjust Parameters</h3>
+                <ModelPresets
+                  ref={boundingBoxRef}
+                  uploadImageRaw={uploadImageRaw}
+                  uploadImgBlob={uploadImgBlob}
+                  meshParameters={meshParameters}
+                  activeIndex={activeIndex}
+                  voxelScale={voxelScale}
+                  voxelMode={voxelMode}
+                  pcdUncertainty={pcdUncertainty}
+                  updateFlag={updateFlag}
+                  setUpdateFlag={setUpdateFlag}
+                  setMeshParameters={setMeshParameters}
+                  setActiveIndex={setActiveIndex}
+                  setVoxelScale={setVoxelScale}
+                  setVoxelMode={setVoxelMode}
+                  setPcdUncertainty={setPcdUncertainty}
+                />
+              </div>
+            </div>
+            {/* Generate Code */}
+            <div className='flex-[7] shrink-0 h-[756px] flex flex-col'>
+              <h3 className="text-xl font-semibold mb-4 text-blue-200">Generated Code</h3>
+              <div className="bg-gray-800 p-4 rounded-lg mb-4 relative h-full">
+                <ParamsDisplay
+                  copied={copied}
+                  ref={ParamsDisplayRef}
+                  meshValues={meshValues}
+                  activeIndex={activeIndex}
+                  voxelScale={voxelScale}
+                  voxelMode={voxelMode}
+                  pcdUncertainty={pcdUncertainty}
+                  boundingBoxRef={boundingBoxRef}
+                  updateFlag={updateFlag}
+                  setCopied={setCopied}
+                />
+              </div>
+              <button
+                onClick={handCopyCode}
+                className="w-full py-3 bg-[#8571FF] rounded-lg hover:bg-[#8571FF] transition-colors text-white font-semibold shadow-lg shadow-blue-500/50 hover:shadow-blue-500/75"
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
             </div>
           </div>
 
-          {/* Conditions */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-blue-200">Conditions</h3>
-            <div className="flex justify-around">
-              {meshValues.map(renderConditionButton)}
-            </div>
-          </div>
 
-          {/* Model Upload and Parameters */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-4 text-blue-200">Upload Model & Adjust Parameters</h3>
-            <ModelPresets
-              ref={boundingBoxRef}
-              uploadImageRaw={uploadImageRaw}
-              uploadImgBlob={uploadImgBlob}
-              meshParameters={meshParameters}
-              activeIndex={activeIndex}
-              voxelScale={voxelScale}
-              voxelMode={voxelMode}
-              pcdUncertainty={pcdUncertainty}
-              updateFlag={updateFlag}
-              setUpdateFlag={setUpdateFlag}
-              setMeshParameters={setMeshParameters}
-              setActiveIndex={setActiveIndex}
-              setVoxelScale={setVoxelScale}
-              setVoxelMode={setVoxelMode}
-              setPcdUncertainty={setPcdUncertainty}
-            />
-          </div>
 
-          {/* Generate Code */}
-          <div>
-            <h3 className="text-xl font-semibold mb-4 text-blue-200">Generated Code</h3>
-            <div className="bg-gray-800 p-4 rounded-lg mb-4 relative">
-              <ParamsDisplay
-                copied={copied}
-                ref={ParamsDisplayRef}
-                meshValues={meshValues}
-                activeIndex={activeIndex}
-                voxelScale={voxelScale}
-                voxelMode={voxelMode}
-                pcdUncertainty={pcdUncertainty}
-                boundingBoxRef={boundingBoxRef}
-                updateFlag={updateFlag}
-                setCopied={setCopied}
-              />
-            </div>
-            <button
-              onClick={handCopyCode}
-              className="w-full py-3 bg-[#8571FF] rounded-lg hover:bg-[#8571FF] transition-colors text-white font-semibold shadow-lg shadow-blue-500/50 hover:shadow-blue-500/75"
-            >
-              {copied ? 'Copied!' : 'Copy'}
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -309,35 +315,72 @@ function NewRodin() {
 class ShapesGenerator {
   constructor() {
     this.createShapescene = new THREE.Scene();
+    this.cubeShape = null
+    this.sphereShape = null
+    this.cylinderShape = null
+    this.coneShape = null;
+    this.torusShape = null;
     this.currentShape = null;
+
+    this.cubeFile = null
+    this.sphereFile = null
+    this.cylinderFile = null
+    this.torusFile = null;
+    this.coneFile = null;
+
+    // this.initShapes()
+  }
+
+  initShapes() {
+    this.createCube()
   }
 
   async createCube(size = 100) {
+    if (this.cubeFile) {
+      return this.cubeFile
+    }
     const geometry = new THREE.BoxGeometry(size, size, size);
-    return await this.createShape(geometry);
+    this.cubeFile = await this.createShape(geometry, 'cube-deemos');
+    return this.cubeFile
   }
 
   async createSphere(radius = 50, widthSegments = 32, heightSegments = 32) {
+    if (this.sphereFile) {
+      return this.sphereFile
+    }
     const geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
-    return await this.createShape(geometry);
+    this.sphereFile = await this.createShape(geometry, 'sphere-deemos');
+    return this.sphereFile
   }
 
   async createCylinder(radiusTop = 50, radiusBottom = 50, height = 100, radialSegments = 32) {
+    if (this.cylinderFile) {
+      return this.cylinderFile
+    }
     const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments);
-    return await this.createShape(geometry);
+    this.cylinderFile = await this.createShape(geometry, 'cylinder-deemos');
+    return this.cylinderFile
   }
 
   async createCone(radius = 50, height = 100, radialSegments = 32) {
+    if (this.coneFile) {
+      return this.coneFile
+    }
     const geometry = new THREE.ConeGeometry(radius, height, radialSegments);
-    return await this.createShape(geometry);
+    this.coneFile = await this.createShape(geometry, 'cone-deemos');
+    return this.coneFile
   }
 
   async createTorus(radius = 50, tube = 20, radialSegments = 16, tubularSegments = 100) {
+    if (this.torusFile) {
+      return this.torusFile
+    }
     const geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
-    return await this.createShape(geometry);
+    this.torusFile = await this.createShape(geometry, 'torus-deemos');
+    return this.torusFile
   }
 
-  createShape(geometry) {
+  createShape(geometry, name) {
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
     if (this.currentShape) {
       this.createShapescene.remove(this.currentShape);
@@ -349,7 +392,7 @@ class ShapesGenerator {
         if (!this.currentShape) {
           throw new Error('还没有创建任何形状');
         }
-        const randomName = this.generateRandomString(6) + ".obj";
+        const randomName = name + '.obj';
         const exporter = new OBJExporter();
         const result = exporter.parse(this.createShapescene);
         const blob = new Blob([result], { type: 'text/plain' });

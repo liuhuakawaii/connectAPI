@@ -457,6 +457,7 @@ class ThreeController {
 
           try {
             loader = await this.fileLoaderMap[extension]();
+
             if (!loader) throw Error("Unsupported file format")
           } catch (e) {
             this.tip({
@@ -464,6 +465,7 @@ class ThreeController {
               content: this.translation('TIP_ERR_UNSUPPORT_FILE')
             })
             this.isAnimation = false
+            console.log('11111111111111111111');
             this.loadingcb && this.loadingcb(true)
             return;
           }
