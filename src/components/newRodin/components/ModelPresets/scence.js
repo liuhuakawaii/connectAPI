@@ -49,6 +49,7 @@ class ThreeController {
     this.closePortal = options.closePortal
     this.handleConfirmBoxSize = options.handleConfirmBoxSize
     this.createShapescene = new THREE.Scene()
+    this.setUpdateFlag = options.setUpdateFlag
     this.fileLoaderMap = {
       'glb': () => import('three149/examples/jsm/loaders/GLTFLoader').then(module => new module.GLTFLoader()),
       'fbx': () => import('three149/examples/jsm/loaders/FBXLoader').then(module => new module.FBXLoader()),
@@ -1279,6 +1280,7 @@ class ThreeController {
     });
 
     setTimeout(() => {
+      this.setUpdateFlag(pre => pre + 1)
       this.isAnimation = false;
     }, 300);
   }
@@ -1340,16 +1342,17 @@ class ThreeController {
     gsap.to({}, {
       duration: 1, // max transition duration
       onUpdate: () => {
-        this.instancedMesh.instanceMatrix.needsUpdate = true;
+        this.instancedMesh && (this.instancedMesh.instanceMatrix.needsUpdate = true);
         this.pointsCache = this.pointsCache.map((item, index) =>
           index === this.newPointsIndex
             ? {
               ...item,
-              instancedMesh: this.instancedMesh.clone()
+              instancedMesh: this?.instancedMesh?.clone()
             }
             : item
         );
         setTimeout(() => {
+          this.setUpdateFlag(pre => pre + 1)
           this.isAnimation = false;
         }, 300);
       }

@@ -153,7 +153,7 @@ function NewRodin() {
         };
         if (selectedShape === 'add') {
           actions[condition]?.();
-          setUpdateFlag(prev => prev + 1);
+          // setUpdateFlag(prev => prev + 1);
         } else {
           const b = boundingBoxRef.current;
           const ShapesGeneratorController = ShapesGeneratorRef.current;
@@ -170,7 +170,7 @@ function NewRodin() {
             createShape.call(ShapesGeneratorController).then(data => {
               b.handlerFiles(data, condition);
             }).then(() => {
-              setUpdateFlag(prev => prev + 1);
+              // setUpdateFlag(prev => prev + 1);
             });
           }
         }

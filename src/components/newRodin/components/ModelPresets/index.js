@@ -217,7 +217,8 @@ const ModelPresets = React.forwardRef(({
           translation: t,
           closePortal: closePortal,
           updateJSON: updateJSON,
-          handleConfirmBoxSize: handleConfirmBoxSize
+          handleConfirmBoxSize: handleConfirmBoxSize,
+          setUpdateFlag: setUpdateFlag
         }
         threeController.current = new CustomBox(options)
         threeController.current.homepageInit()

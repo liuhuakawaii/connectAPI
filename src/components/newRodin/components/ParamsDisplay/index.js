@@ -16,10 +16,8 @@ const ParamsDisplay = React.forwardRef(({
   const [params, setParams] = useState({});
 
   useEffect(() => {
-    console.log('--------参数更新---------');
-
+    console.log('--------参数更新---------', activeIndex);
     let newParams = {};
-
     if (activeIndex === 0) {
       newParams = {
         bbox_condition: [...Object.values(meshValues[0].pos), 1]
@@ -32,6 +30,7 @@ const ParamsDisplay = React.forwardRef(({
       };
       if (boundingBoxRef?.current?.threeController?.current) {
         const threeController = boundingBoxRef.current.threeController.current
+
         const voxelCache = threeController.voxelsCache[threeController.newVoxelIndex];
         if (voxelCache.params) {
           newParams.voxel_condition = pos2Base64(voxelCache.params)
