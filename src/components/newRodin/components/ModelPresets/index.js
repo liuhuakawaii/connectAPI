@@ -41,7 +41,8 @@ const ModelPresets = React.forwardRef(({
   pcdUncertainty,
   setPcdUncertainty,
   updateFlag,
-  setUpdateFlag
+  setUpdateFlag,
+  setSelectedShape
 }, ref) => {
   const { t } = useTranslation();
   const boundingBoxRef = useRef(null)
@@ -455,7 +456,7 @@ const ModelPresets = React.forwardRef(({
       tip({ content: t('TIP_WRAN_THREEWRAPPER_VOXEL_COMPLETE'), type: 'warning' });
       return;
     }
-
+    setSelectedShape('add')
     const index = condition !== undefined ? condition : activeIndex;
 
     if (!openThreeWrapper) {

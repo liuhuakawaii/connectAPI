@@ -32,7 +32,7 @@ const ParamsDisplay = React.forwardRef(({
         const threeController = boundingBoxRef.current.threeController.current
 
         const voxelCache = threeController.voxelsCache[threeController.newVoxelIndex];
-        if (voxelCache.params) {
+        if (voxelCache?.params) {
           newParams.voxel_condition = pos2Base64(voxelCache.params)
         }
       }
@@ -45,7 +45,7 @@ const ParamsDisplay = React.forwardRef(({
       if (boundingBoxRef?.current?.threeController?.current) {
         const threeController = boundingBoxRef.current.threeController.current
         const pointsCache = threeController.pointsCache[threeController.newPointsIndex];
-        newParams.pcd_condition = pointsCache.params
+        newParams.pcd_condition = pointsCache?.params
       }
     }
 

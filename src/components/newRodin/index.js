@@ -274,6 +274,7 @@ function NewRodin() {
                   setVoxelScale={setVoxelScale}
                   setVoxelMode={setVoxelMode}
                   setPcdUncertainty={setPcdUncertainty}
+                  setSelectedShape={setSelectedShape}
                 />
               </div>
             </div>
